@@ -12,7 +12,7 @@ protocol SearchModuleInput: AnyObject {
 }
 
 protocol SearchModuleOutput: AnyObject {
-    func searchModuleDetailModuleShow(_ moduleInput: SearchModuleInput)
+    func searchModuleDetailModuleShow(_ moduleInput: SearchModuleInput, text: String, meanings: [Meaning?])
 }
 
 final class SearchModule {

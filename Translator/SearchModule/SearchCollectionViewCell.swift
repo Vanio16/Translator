@@ -23,7 +23,7 @@ class SearchCollectionViewCell: UICollectionViewCell {
     private let view: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 10
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBlue
         return view
     }()
     

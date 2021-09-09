@@ -8,9 +8,10 @@
 import Foundation
 import UIKit
 import Framezilla
+import Kingfisher
 
 protocol DetailViewOutput {
-    
+    func goBack()
 }
 
 final class DetailViewController: UIViewController {
@@ -25,12 +26,20 @@ final class DetailViewController: UIViewController {
     
     // MARK: - Subviews
     let textLabel = UILabel()
-    let translationLabel = UILabel()
-    let backgroundImage: UIImageView = {
-        let image = UIImageView()
-        image.image = .init(named: "bg")
-        return image
+    let backButton: UIButton = {
+       let button = UIButton()
+        button.setTitle("Назад", for: .normal)
+        button.addTarget(self, action: #selector(tapBackButton), for: .touchUpInside)
+        return button
     }()
+    
+    private let collectionViewFlowLayout: UICollectionViewFlowLayout = {
+        let layout = UICollectionViewFlowLayout()
+        return layout
+    }()
+    
+    private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
+    lazy var manager = CollectionViewManager(collectionView: collectionView)
     
     // MARK: - Lifecycle
     
@@ -45,17 +54,50 @@ final class DetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.add(backgroundImage)
+        view.backgroundColor = .systemGreen
+        collectionView.backgroundColor = .white
+        view.add(textLabel, backButton, collectionView)
     }
     
     // MARK: - Layout
     
     override func viewDidLayoutSubviews() {
-        backgroundImage.configureFrame { maker in
-            maker.top()
+        textLabel.configureFrame { maker in
+            maker.top(to: view.nui_safeArea.top, inset: 20)
+                .left(inset: 16)
+                .right()
+                .heightToFit()
+        }
+        
+        backButton.configureFrame { maker in
+            maker.top(to: view.nui_safeArea.top, inset: 3)
+                .right(inset: 5)
+                .sizeToFit()
+        }
+        
+        collectionView.configureFrame { maker in
+            maker.top(to: textLabel.nui_bottom, inset: 20)
                 .right()
                 .left()
                 .bottom()
         }
+    }
+    
+    func update(text: String, meanings: [Meaning?]) {
+        textLabel.text = text
+        let cellItems = meanings.compactMap { meaning -> DetailCollectionViewCellItem? in
+            guard let title = meaning?.translation?.text else {
+                return nil
+            }
+            let item = DetailCollectionViewCellItem(text: title, url: meaning?.imageUrl ?? "")
+            return item
+        }
+        let sectionItem = GeneralCollectionViewDiffSectionItem(cellItems: cellItems)
+        sectionItem.insets = .init(top: 10, left: 10, bottom: 1, right: 10)
+        sectionItem.minimumLineSpacing = 10
+        manager.update(with: [sectionItem], animated: true)
+    }
+    @objc private func tapBackButton() {
+        output.goBack()
     }
 }

@@ -11,6 +11,7 @@ protocol DetailModuleInput: AnyObject {
 }
 
 protocol DetailModuleOutput: AnyObject {
+    func detailModuleSearchModuleShow(_ moduleInput: DetailModuleInput)
 }
 
 final class DetailModule {

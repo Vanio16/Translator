@@ -17,8 +17,8 @@ final class SearchPresenter {
 }
 
 extension SearchPresenter: SearchViewOutput {
-    func showDetailScreen() {
-        output?.searchModuleDetailModuleShow(self)
+    func showDetailScreen(text: String, meanings: [Meaning?]) {
+        output?.searchModuleDetailModuleShow(self, text: text, meanings: meanings)
     }
 }
 

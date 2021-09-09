@@ -9,10 +9,10 @@ import Foundation
 import UIKit
 
 final class MainCoordinator: SearchModuleOutput, DetailModuleOutput {
-
     let window: UIWindow
     var navigationController: UINavigationController
     let searchModule = SearchModule()
+    let detailModule = DetailModule()
 
     init(window: UIWindow) {
         self.window = window
@@ -22,11 +22,17 @@ final class MainCoordinator: SearchModuleOutput, DetailModuleOutput {
 
     func start() {
         searchModule.output = self
+        detailModule.output = self
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
     }
     
-    func searchModuleDetailModuleShow(_ moduleInput: SearchModuleInput) {
-        
+    func searchModuleDetailModuleShow(_ moduleInput: SearchModuleInput, text: String, meanings: [Meaning?]) {
+        detailModule.viewController.update(text: text, meanings: meanings)
+        navigationController.pushViewController(detailModule.viewController, animated: true)
+    }
+    
+    func detailModuleSearchModuleShow(_ moduleInput: DetailModuleInput) {
+        navigationController.popViewController(animated: true)
     }
 }

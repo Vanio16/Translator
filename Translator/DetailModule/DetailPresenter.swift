@@ -17,6 +17,10 @@ final class DetailPresenter {
 }
 
 extension DetailPresenter: DetailViewOutput {
+    func goBack() {
+        output?.detailModuleSearchModuleShow(self)
+    }
+    
 
 }
 

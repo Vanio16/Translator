@@ -11,7 +11,7 @@ import Framezilla
 import Kingfisher
 
 protocol SearchViewOutput {
-    func showDetailScreen()
+    func showDetailScreen(text: String, meanings: [Meaning?])
 }
 
 final class SearchViewController: UIViewController {
@@ -61,6 +61,7 @@ final class SearchViewController: UIViewController {
         searchTextField.delegate = self
         view.add(searchTextField, collectionView)
         view.backgroundColor = .white
+        collectionView.backgroundColor = .white
     }
     
     // MARK: - Layout
@@ -81,18 +82,14 @@ final class SearchViewController: UIViewController {
         }
     }
     
-    @objc private func showDetailScreen() {
-        output.showDetailScreen()
-    }
-    
     private func update() {
-        let titles: [String] = meanings.compactMap { meaning in
-            return meaning.text
-        }
-        let cellItems = titles.map { title -> SearchCollectionViewCellItem in
+        let cellItems = meanings.compactMap { meaning -> SearchCollectionViewCellItem? in
+            guard let title = meaning.text else {
+                return nil
+            }
             let item = SearchCollectionViewCellItem(text: title)
             item.itemDidSelectHandler = { _ in
-                
+                self.output.showDetailScreen(text: title, meanings: meaning.meanings)
             }
             return item
         }
