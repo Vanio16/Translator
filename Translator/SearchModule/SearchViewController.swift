@@ -88,8 +88,8 @@ final class SearchViewController: UIViewController {
                 return nil
             }
             let item = SearchCollectionViewCellItem(text: title)
-            item.itemDidSelectHandler = { _ in
-                self.output.showDetailScreen(text: title, meanings: meaning.meanings)
+            item.itemDidSelectHandler = { [weak self] _ in
+                self?.output.showDetailScreen(text: title, meanings: meaning.meanings)
             }
             return item
         }

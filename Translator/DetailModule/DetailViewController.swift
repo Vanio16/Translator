@@ -11,7 +11,7 @@ import Framezilla
 import Kingfisher
 
 protocol DetailViewOutput {
-    func goBack()
+    func backButtonPressed()
 }
 
 final class DetailViewController: UIViewController {
@@ -29,7 +29,7 @@ final class DetailViewController: UIViewController {
     let backButton: UIButton = {
        let button = UIButton()
         button.setTitle("Назад", for: .normal)
-        button.addTarget(self, action: #selector(tapBackButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(backButtonTriggered), for: .touchUpInside)
         return button
     }()
     
@@ -97,7 +97,7 @@ final class DetailViewController: UIViewController {
         sectionItem.minimumLineSpacing = 10
         manager.update(with: [sectionItem], animated: true)
     }
-    @objc private func tapBackButton() {
-        output.goBack()
+    @objc private func backButtonTriggered() {
+        output.backButtonPressed()
     }
 }
